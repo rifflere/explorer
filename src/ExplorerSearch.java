@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ExplorerSearch {
@@ -29,11 +30,8 @@ public class ExplorerSearch {
      * @return the number of spaces the explorer can reach
      */
     public static int reachableArea(int[][] island) {
-        // Implement your method here!
-        // Please also make more test cases
-        // I STRONGLY RECOMMEND testing some helpers you might make too
-
-        // CHECK IF NULL INPUT?
+        // Edge case checks
+        if (island == null || island.length == 0 || island[0].length == 0) return 0;
 
         // Find start
         int[] start = findStart(island);
@@ -45,12 +43,12 @@ public class ExplorerSearch {
         ExploredMap visited = new ExploredMap(island.length, island[0].length);
 
         // recursively explore island, adding to validMoves
-        int canReach = reachableArea(island, visited, start, 0);
+        int canReach = reachableArea(island, visited, start);
 
         return canReach;
     }
 
-    public static int reachableArea(int[][] island, ExploredMap visited, int[] current, int canReach) {
+    public static int reachableArea(int[][] island, ExploredMap visited, int[] current) {
         // deconstruct current
         int row = current[0];
         int col = current[1];
@@ -60,13 +58,13 @@ public class ExplorerSearch {
         visited.setRecord(row, col, true);
 
         // Increment valid move counter
-        canReach++;
+        int canReach = 1;
 
         List<int[]> moves = validMoves(island, current);
 
         for (var newLocation: moves) {
             // Recurse and add to validMoves
-            canReach += reachableArea(island, visited, newLocation, canReach);
+            canReach += reachableArea(island, visited, newLocation);
         }
         
         // return total number of valid moves
@@ -85,13 +83,14 @@ public class ExplorerSearch {
     public static int[] findStart(int[][] island) {
         // Loop through island until '0' found, return int array of row, column coordinates
         int[] start = {-1, -1};
+        int[] falseStart = {-1, -1};
         boolean startFound = false;
 
         for (int r = 0; r < island.length; r++) {
             for (int c = 0; c < island[r].length; c++) {
 
+                // This check may be unnecessary if guaranteed valid data, but I want to ensure that I am working with a valid map before I start processing it.
                 if(island[r][c] > 3 || island[r][c] < 0) {
-                    // This check may be unnecessary if guaranteed valid data, but I want to ensure that I am working with a valid map before I start processing it.
                     throw new IllegalArgumentException("Island contains invalid character(s)."); 
                 }
 
@@ -107,11 +106,11 @@ public class ExplorerSearch {
             }
         }
 
-        if (!start.equals(new int[]{-1, -1})) {
-            return start;
-        } else {
+        if (Arrays.equals(start, falseStart)) {
             throw new IllegalArgumentException("Island contains no start.");
         }
+
+        return start;
     }
 
     // 

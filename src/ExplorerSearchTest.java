@@ -4,7 +4,21 @@ import java.util.*;
 
 public class ExplorerSearchTest {
     @Test
-    public void testReachableArea_someUnreachable() {
+    public void testReachableArea_allUnreachable() {
+        int[][] island = {
+            {1,1,1,1,1,1},
+            {1,1,1,1,1,1},
+            {1,1,1,1,1,1},
+            {1,1,1,1,0,1},
+            {1,1,1,1,1,1},
+        };
+        int actual = ExplorerSearch.reachableArea(island);
+        assertEquals(30, actual);
+    }
+
+
+    @Test
+    public void testReachableArea_someUnreachableMiddleStart() {
         int[][] island = {
             {1,1,1,3,1,1},
             {3,2,3,1,3,1},
@@ -14,6 +28,71 @@ public class ExplorerSearchTest {
         };
         int actual = ExplorerSearch.reachableArea(island);
         assertEquals(14, actual);
+    }
+
+    @Test
+    public void testReachableArea_someUnreachableTopLeftStart() {
+        int[][] island = {
+            {0,1,1,3,1,1},
+            {3,2,3,1,3,1},
+            {1,1,1,1,3,3},
+            {3,1,2,1,3,1},
+            {1,1,1,2,1,1},
+        };
+        int actual = ExplorerSearch.reachableArea(island);
+        assertEquals(3, actual);
+    }
+
+    @Test
+    public void testReachableArea_someUnreachableTopRightStart() {
+        int[][] island = {
+            {1,1,1,3,1,0},
+            {3,2,3,1,3,1},
+            {1,1,1,1,3,3},
+            {3,1,2,1,3,1},
+            {1,1,1,2,1,1},
+        };
+        int actual = ExplorerSearch.reachableArea(island);
+        assertEquals(3, actual);
+    }
+
+    @Test
+    public void testReachableArea_someUnreachableBottomLeftStart() {
+        int[][] island = {
+            {1,1,1,3,1,2},
+            {3,2,3,1,3,1},
+            {1,1,1,1,3,3},
+            {3,1,2,1,3,1},
+            {0,1,1,2,1,1},
+        };
+        int actual = ExplorerSearch.reachableArea(island);
+        assertEquals(10, actual);
+    }
+
+    @Test
+    public void testReachableArea_someUnreachableBottomRightStart() {
+        int[][] island = {
+            {1,1,1,3,1,2},
+            {3,2,3,1,3,1},
+            {1,1,1,1,3,3},
+            {3,1,2,1,3,1},
+            {2,1,1,2,1,0},
+        };
+        int actual = ExplorerSearch.reachableArea(island);
+        assertEquals(3, actual);
+    }
+
+    @Test
+    public void testReachableArea_oneReachable() {
+        int[][] island = {
+            {1,1,1,3,1,1},
+            {3,2,3,1,3,1},
+            {1,1,1,1,3,3},
+            {3,1,2,3,0,3},
+            {1,1,1,2,3,1},
+        };
+        int actual = ExplorerSearch.reachableArea(island);
+        assertEquals(1, actual);
     }
 
     // findStart tests
@@ -283,10 +362,6 @@ public class ExplorerSearchTest {
         assertTrue(moveSet.contains("3,5")); // up
         assertTrue(moveSet.contains("4,4")); // left
     }
-
-
-    // Add more tests here!
-    // Come up with varied cases
 
     // This private helper method which converts a List<int[]> to a Set<String> is borrowed from the Salamander Search 
     private Set<String> toSet(List<int[]> list) {
