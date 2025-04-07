@@ -46,11 +46,13 @@ public class ExplorerSearch {
     }
 
  
-    /* Helper method to find starting position
+    /* Helper method to find starting position.
      * Input: int[][] island
      * Output: int[] containing {r, c} where r = row of start, c = column of '0'
-     * Throws IllegalArgumentException if there is no '0' in island
-     * TODO: handle edge case where there is more than one '0' on island?
+     * Throws IllegalArgumentException: 
+     * - if there is no '0' in island
+     * - if there is more than one '0' in island
+     * - if any number in island is <0 or >3
      */
     public static int[] findStart(int[][] island) {
         // Loop through island until '0' found, return int array of row, column coordinates
@@ -83,6 +85,44 @@ public class ExplorerSearch {
         }
     }
 
-    // Helper method to return valid moves
+    // 
+
+    /* Helper method to return valid moves
+     * Input: int[][] island, int[] current location
+     * Output: List<int[]> containing 0 - 4 row, column coordinates of possible moves.
+     */
+    public static List<int[]> validMoves(int[][] island, int[] currentLocation) {
+        // Deconstruct current location into row, column variables
+        int row = currentLocation[0];
+        int col = currentLocation[1];
+
+        List<int[]> moves = new ArrayList<>();
+
+        // UP (row - 1)
+        int upRow = row - 1;
+        if (upRow >= 0 && island[upRow][col] == 1) {
+            moves.add(new int[]{upRow, col});
+        }
+
+        // DOWN (row + 1)
+        int downRow = row + 1;
+        if (downRow < island.length && island[downRow][col] == 1) {
+            moves.add(new int[]{downRow, col});
+        }
+
+        // LEFT (column - 1)
+        int leftCol = col - 1;
+        if (leftCol >= 0 && island[row][leftCol] == 1) {
+            moves.add(new int[]{row, leftCol});
+        }
+
+        // RIGHT (column + 1)
+        int rightCol = col + 1;
+        if (rightCol < island[0].length && island[row][rightCol] == 1) {
+            moves.add(new int[]{row, rightCol});
+        }
+
+        return moves;
+    }
 
 }
