@@ -54,15 +54,35 @@ public class ExplorerSearch {
      */
     public static int[] findStart(int[][] island) {
         // Loop through island until '0' found, return int array of row, column coordinates
+        int[] start = {-1, -1};
+        boolean startFound = false;
+
         for (int r = 0; r < island.length; r++) {
             for (int c = 0; c < island[r].length; c++) {
+
+                if(island[r][c] > 3 || island[r][c] < 0) {
+                    throw new IllegalArgumentException("Island contains invalid character(s)."); // Make this more descriptive
+                }
+
                 if (island[r][c] == 0) {
-                    return new int[]{r, c};
+                    if (!startFound) {
+                        start[0] = r;
+                        start[1] = c;
+                        startFound = true;
+                    } else {
+                        throw new IllegalArgumentException("Island contains multiple starts.");
+                    }
                 }
             }
         }
-        throw new IllegalArgumentException("No starting location indicated.");
+
+        if (!start.equals(new int[]{-1, -1})) {
+            return start;
+        } else {
+            throw new IllegalArgumentException("Island contains no start.");
+        }
     }
 
     // Helper method to return valid moves
+
 }
