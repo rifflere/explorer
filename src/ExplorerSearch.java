@@ -33,16 +33,44 @@ public class ExplorerSearch {
         // Please also make more test cases
         // I STRONGLY RECOMMEND testing some helpers you might make too
 
-        int validMoves = 0;
+        // CHECK IF NULL INPUT?
 
         // Find start
         int[] start = findStart(island);
 
-        // (if there is a start, validMoves += 1)
+        // Create record of visited locations, set to all False by default
+        // boolean[][] visited = new boolean[island.length][island[0].length];
+
+        // Created a new class object (ExploredMap) to troubleshoot pass by reference not value
+        ExploredMap visited = new ExploredMap(island.length, island[0].length);
 
         // recursively explore island, adding to validMoves
+        int canReach = reachableArea(island, visited, start, 0);
 
-        return validMoves;
+        return canReach;
+    }
+
+    public static int reachableArea(int[][] island, ExploredMap visited, int[] current, int canReach) {
+        // deconstruct current
+        int row = current[0];
+        int col = current[1];
+
+        // If there's a record of this location, return; otherwise, add location to record
+        if (visited.getRecord(row, col)) return 0;
+        visited.setRecord(row, col, true);
+
+        // Increment valid move counter
+        canReach++;
+
+        List<int[]> moves = validMoves(island, current);
+
+        for (var newLocation: moves) {
+            // Recurse and add to validMoves
+            canReach += reachableArea(island, visited, newLocation, canReach);
+        }
+        
+        // return total number of valid moves
+        return canReach;
     }
 
  
@@ -63,7 +91,8 @@ public class ExplorerSearch {
             for (int c = 0; c < island[r].length; c++) {
 
                 if(island[r][c] > 3 || island[r][c] < 0) {
-                    throw new IllegalArgumentException("Island contains invalid character(s)."); // Make this more descriptive
+                    // This check may be unnecessary if guaranteed valid data, but I want to ensure that I am working with a valid map before I start processing it.
+                    throw new IllegalArgumentException("Island contains invalid character(s)."); 
                 }
 
                 if (island[r][c] == 0) {
